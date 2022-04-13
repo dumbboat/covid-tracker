@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	_url = "http://wsjkw.sh.gov.cn/yqtb/index.html"
+	_url = "http://wsjkw.sh.gov.cn/yqtb/index.html" //上海市卫健委疫情发布
 	_ua  = "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36"
 )
 
@@ -39,7 +39,6 @@ func scrapeNewArticleHtml(url string) (html string, err error) {
 	var allocCtx context.Context
 	var cancel context.CancelFunc
 	if checkChromePort() {
-		// 不知道为何，不能直接使用 NewExecAllocator ，因此增加 使用 ws://127.0.0.1:9222/ 来调用
 		allocCtx, cancel = chromedp.NewRemoteAllocator(context.Background(), "ws://127.0.0.1:9222/")
 	} else {
 		allocCtx, cancel = chromedp.NewExecAllocator(context.Background(), options...)
