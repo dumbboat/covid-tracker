@@ -1,0 +1,31 @@
+{{ define "home" }}
+
+<!DOCTYPE html>
+<html lang="en">
+  {{ template "header" }}
+
+  <body>
+
+    {{ template "navbar" }}
+
+    <div class="container">
+
+      <div class="starter-template">
+        <small>订阅成功后将以电子邮件告知您所在的小区/村庄的每日疫情信息</small>
+        <br> <br>
+        <form action="/register" method="post">
+            住址  <input type="text" id="addr" name="addr" placeholder="如: 浦东大道1800号/弄">
+            <br><br>
+            邮箱  <input type="email" id="email" name="email">
+            <br><br>
+            <input type="submit" value="提交">
+          </form>
+          {{.Result}}
+      </div>
+
+    </div><!-- /.container -->
+
+    {{ template "footer" }}
+  </body>
+</html>
+{{ end }}
