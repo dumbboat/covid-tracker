@@ -11,9 +11,9 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/dumbboat/covid-tracker/crawling"
 	"github.com/dumbboat/covid-tracker/delivering"
 	"github.com/dumbboat/covid-tracker/store"
-	"github.com/dumbboat/covid-tracker/wechat"
 	"github.com/thedevsaddam/renderer"
 )
 
@@ -21,6 +21,10 @@ var rnd *renderer.Render
 var configFile *string
 
 func init() {
+	renderHTMLs()
+}
+
+func renderHTMLs() {
 	opts := renderer.Options{
 		ParseGlobPattern: "./tpl/*.html",
 	}
@@ -67,8 +71,8 @@ func main() {
 				continue
 			}
 
-			filename := fmt.Sprintf("./%s-%s", date, wechat.ReportSuffix)
-			err := wechat.CrawlShanghaiCovid19Report(filename)
+			filename := fmt.Sprintf("./%s-%s", date, crawling.ReportSuffix)
+			err := crawling.CrawlShanghaiCovid19Report(filename)
 			if err != nil {
 				log.Printf("crawled daily covid19 report of shanghai,err: %s\n", err.Error())
 			} else {
@@ -93,6 +97,7 @@ func main() {
 	mux.HandleFunc("/about", about)
 	mux.HandleFunc("/register", Register)
 	mux.HandleFunc("/unregister", UnRegister)
+	mux.HandleFunc("/news", news)
 	port := ":80"
 	log.Println("Listening on port ", port)
 	http.ListenAndServe(port, mux)
@@ -101,6 +106,11 @@ func main() {
 
 func about(w http.ResponseWriter, r *http.Request) {
 	rnd.HTML(w, http.StatusOK, "about", nil)
+}
+
+func news(w http.ResponseWriter, r *http.Request) {
+	renderHTMLs()
+	rnd.HTML(w, http.StatusOK, "news", nil)
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
